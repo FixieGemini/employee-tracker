@@ -1,20 +1,20 @@
-INSERT INTO department (id, dep_name)
-VALUES (001, 'Sales'),
-       (002, 'Engineering'),
-       (003, 'Finance'),
-       (004, 'Legal'),
-       (005, 'Human Resources');
+INSERT INTO department (dep_name)
+VALUES ('Sales'),
+       ('Engineering'),
+       ('Finance'),
+       ('Legal'),
+       ('Human Resources');
 
-INSERT INTO emp_role (id, title, salary, department_id)
-VALUES (001, 'Salesman', 40000.00, 001),
-       (002, 'Engineer', 70000.00, 002),
-       (003, 'Accountant', 50000.00, 003),
-       (004, 'Lawyer', 100000.00, 004),
-       (005, 'Recruiter', 30000.00, 005);
+INSERT INTO emp_role (title, salary, department_id)
+VALUES ('Salesman', 40000.00, 1),
+       ('Engineer', 70000.00, 2),
+       ('Accountant', 50000.00, 3),
+       ('Lawyer', 100000.00, 4),
+       ('Recruiter', 30000.00, 5);
 
-INSERT INTO employee (id, first_name,last_name, role_id, manager_id)
-VALUES (001, 'Kevin', 'Draper', 001, 001),
-       (002, 'Clyde', 'Shelton', 002, 002),
-       (003, 'Chris', 'Wolff', 003, 003),
-       (004, 'Rachel', 'Zane', 004, 004),
-       (005, 'Naomi', 'Lapaglia', 005, 005);
+INSERT INTO employee (first_name,last_name, role_id, manager_id)
+VALUES ('Kevin', 'Draper', 1, NULL),
+       ('Clyde', 'Shelton', 2, 1),
+       ('Chris', 'Wolff', 3, 1),
+       ('Rachel', 'Zane', 4, 1),
+       ('Naomi', 'Lapaglia', 5, 1);

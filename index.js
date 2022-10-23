@@ -1,12 +1,8 @@
+// List Dependencies
 const inquirer = require('inquirer');
 const fs = require('fs');
 const cTable = require('console.table');
-const express = require('express');
 const mysql = require('mysql2');
-
-const PORT = process.env.PORT || 3001;
-
-const app = express();
 
 const listChoices = () => {
     inquirer.prompt ([
@@ -25,5 +21,16 @@ const listChoices = () => {
                 'Add department'
             ]
         }
-    ])
+    ]).then(answer => {
+        switch(answer.choice){
+            case 'View all employees': return viewEmployees();
+            case 'Add employee': return addEmployee();
+            case 'Update employee role': return updateRole();
+            case 'View all roles': return viewRoles();
+            case 'Add role': return addRole();
+            case 'View all departments': return viewDepartments();
+            case 'Add department': return addDepartment();
+            default: return
+        }
+    })
 }
