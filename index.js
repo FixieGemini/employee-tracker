@@ -3,6 +3,7 @@ const inquirer = require('inquirer');
 const fs = require('fs');
 const cTable = require('console.table');
 const mysql = require('mysql2');
+const { debugPort } = require('process');
 
 // Connect to database
 const db = mysql.createConnection(
@@ -129,7 +130,48 @@ const addEmployee = () => {
     });
 };
 
-const updateRole = () => {}
+const updateRole = () => {
+    db.query(`SELECT * FROM employee`, (err, result) => {
+        if(err) {
+            console.log(err);
+            return;
+        }
+        const currentEmployees = result.map(({id, first_name, last_name}) => ({name: `${first_name} ${last_name}`,value: id}));
+        inquirer.prompt([
+            {
+                type: 'list',
+                name: 'selectedEmployee',
+                message: 'Which employee\'s role would you like to update?',
+                choices: currentEmployees
+            }
+        ]).then(({selectedEmployee}) => {
+            db.query(`SELECT * FROM emp_role`, (err, result) => {
+                if (err) {
+                    console.log(err);
+                    return;
+                }
+                const currentRoles = result.map(({id, title}) => ({ name: title, value: id}));
+                inquirer.prompt([
+                    {
+                        type: 'list',
+                        name: 'selectedRole',
+                        message: 'Which role would you like to assign to selected employee?',
+                        choices: currentRoles
+                    }
+                ]).then(({selectedRole}) => {
+                    db.query(`UPDATE employee SET role_id = ${selectedRole} WHERE id = ${selectedEmployee}`, (err, result) => {
+                        if(err) {
+                            console.log(err);
+                            return;
+                        }
+                        console.log('Employee role updated');
+                        listChoices();
+                    });
+                });
+            });
+        });
+    });
+};
 
 const viewRoles = () => {
     db.query(`SELECT * FROM emp_role`, (err, data) => {
@@ -146,6 +188,23 @@ const viewDepartments = () => {
         listChoices();
     });
 }
-const addDepartment = () => {}
+const addDepartment = () => {
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'departmentName',
+            message: 'What is the name of the department you would like to add?'
+        }
+    ]).then(({departmentName}) => {
+        db.query(`INSERT INTO department ('department') VALUE ('${departmentName}')`, (err, result) => {
+            if(err) {
+                console.log(err);
+                return;
+            }
+            console.log(`${departmentName} has been added to database`);
+            listChoices();
+        })
+    })
+}
 
 listChoices();
